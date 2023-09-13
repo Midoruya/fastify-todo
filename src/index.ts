@@ -9,7 +9,7 @@ const start = async () => {
 
   try {
     await app.listen({
-      port: 3000,
+      port: app.config.PORT,
       host: 'localhost',
     });
 
