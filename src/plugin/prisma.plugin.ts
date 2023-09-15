@@ -20,6 +20,7 @@ const prismaPlugin = fp(async (server) => {
   server.addHook('onClose', async () =>  {
     await server.prisma.$disconnect();
   });
+  server.after()
 });
 
 export default prismaPlugin;
