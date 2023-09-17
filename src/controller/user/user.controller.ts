@@ -28,7 +28,7 @@ export default async function (app: FastifyInstance) {
         response.code(404);
         throw new Error("Не верное имя пользователя или пароль");
       }
-      return getUserData;
+      return await app.createUserAuthToken(getUserData.id);
     }
   );
   app.post(
@@ -53,7 +53,7 @@ export default async function (app: FastifyInstance) {
           password: newPasswordHash,
         },
       });
-      return result;
+      return await app.createUserAuthToken(result.id);
     }
   );
 }

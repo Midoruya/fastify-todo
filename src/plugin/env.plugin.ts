@@ -4,7 +4,9 @@ import fp from "fastify-plugin";
 
 const schema = Type.Object({
   DATABASE_URL: Type.String(),
-  PORT: Type.Number({ default: 5000 }),
+  PORT: Type.Optional(Type.Number({ default: 5000 })),
+  JWT_SECRET: Type.Optional(Type.String({ default: "superSecret" })),
+  JWT_TIME_LIFE: Type.Optional(Type.String({ default: "1h" })),
 });
 
 const option = {
