@@ -1,9 +1,8 @@
-import { FastifyInstance } from "fastify"
+import { FastifyInstance } from "fastify";
 
 export default async function (app: FastifyInstance) {
-  console.log('init');
-  app.get('/', () => {
-    return { something: 'else' }
-  })
-
+  console.log("init");
+  app.get("/", () => {
+    return { something: "else" };
+  });
 }

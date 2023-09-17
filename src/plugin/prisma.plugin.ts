@@ -1,5 +1,5 @@
-import { PrismaClient } from '@prisma/client';
-import fp from 'fastify-plugin';
+import { PrismaClient } from "@prisma/client";
+import fp from "fastify-plugin";
 
 async function initDatabaseConnection(): Promise<PrismaClient> {
   const db = new PrismaClient();
@@ -7,20 +7,20 @@ async function initDatabaseConnection(): Promise<PrismaClient> {
   return db;
 }
 
-declare module 'fastify' {
+declare module "fastify" {
   interface FastifyInstance {
-    prisma: PrismaClient
+    prisma: PrismaClient;
   }
 }
 
 const prismaPlugin = fp(async (server) => {
   const prisma = await initDatabaseConnection();
 
-  server.decorate('prisma', prisma);
-  server.addHook('onClose', async () =>  {
+  server.decorate("prisma", prisma);
+  server.addHook("onClose", async () => {
     await server.prisma.$disconnect();
   });
-  server.after()
+  server.after();
 });
 
 export default prismaPlugin;

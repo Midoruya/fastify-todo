@@ -12,7 +12,23 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  name     String @unique @db.VarChar(120)
-  password String @db.VarChar(125)
+  id                  Int                   @id @default(autoincrement())
+  name                String                @unique @db.VarChar(120)
+  password            String                @db.VarChar(125)
+  LinkUserToDashboard LinkUserToDashboard[]
+}
+
+model Dashboard {
+  id                  Int                   @id @default(autoincrement())
+  name                String                @db.VarChar(120)
+  description         String?               @db.VarChar(255)
+  LinkUserToDashboard LinkUserToDashboard[]
+}
+
+model LinkUserToDashboard {
+  id          Int       @id
+  user        User      @relation(fields: [userId], references: [id])
+  userId      Int // relation scalar field (used in the `@relation` attribute above)
+  dashboard   Dashboard @relation(fields: [dashboardId], references: [id])
+  dashboardId Int // relation scalar field (used in the `@relation` attribute above)
 }
