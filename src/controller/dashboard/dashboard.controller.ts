@@ -68,6 +68,7 @@ export default async function (app: FastifyInstance) {
         data: {
           name: payload.name,
           description: payload.description,
+          ownerUserId: jwtPayload.userId,
           users: {
             create: {
               userId: jwtPayload.userId,
@@ -90,7 +91,19 @@ export default async function (app: FastifyInstance) {
       request: FastifyRequest<{ Params: Static<typeof DeleteDashboardSchema> }>
     ) => {
       // TODO: Нужно сделать что бы возврашались дашборды только тем кто на них подписан
+      const jwtPayload = request.user;
       const payload = request.params;
+      const userList = await app.prisma.linkUserToDashboard.findMany({
+        where: {
+          dashboardId: payload.id,
+        },
+        orderBy: {
+          id: "asc",
+        },
+      });
+      if (userList[0].userId !== jwtPayload.userId) {
+        throw new Error("Удалить доску может только ее создатель");
+      }
       const data = await app.prisma.dashboard.delete({
         where: {
           id: payload.id,

@@ -16,20 +16,24 @@ model User {
   name       String                @unique @db.VarChar(120)
   password   String                @db.VarChar(125)
   dashboards LinkUserToDashboard[]
+  Dashboard  Dashboard[]
 }
 
 model Dashboard {
   id          Int                   @id @default(autoincrement())
   name        String                @db.VarChar(120)
   description String?               @db.VarChar(255)
+  ownerUser   User                  @relation(fields: [ownerUserId], references: [id], onDelete: Cascade)
+  ownerUserId Int
   users       LinkUserToDashboard[]
 }
 
 model LinkUserToDashboard {
-  user        User      @relation(fields: [userId], references: [id])
+  id          Int       @id @default(autoincrement())
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      Int // relation scalar field (used in the `@relation` attribute above)
-  dashboard   Dashboard @relation(fields: [dashboardId], references: [id])
+  dashboard   Dashboard @relation(fields: [dashboardId], references: [id], onDelete: Cascade)
   dashboardId Int // relation scalar field (used in the `@relation` attribute above)
 
-  @@id([userId, dashboardId])
+  @@index([userId, dashboardId])
 }
