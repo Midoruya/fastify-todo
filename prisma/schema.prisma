@@ -35,5 +35,6 @@ model LinkUserToDashboard {
   dashboard   Dashboard @relation(fields: [dashboardId], references: [id], onDelete: Cascade)
   dashboardId Int // relation scalar field (used in the `@relation` attribute above)
 
+  @@unique([userId, dashboardId])
   @@index([userId, dashboardId])
 }
