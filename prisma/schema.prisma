@@ -20,20 +20,41 @@ model User {
 }
 
 model Dashboard {
-  id          Int                   @id @default(autoincrement())
-  name        String                @db.VarChar(120)
-  description String?               @db.VarChar(255)
-  ownerUser   User                  @relation(fields: [ownerUserId], references: [id], onDelete: Cascade)
-  ownerUserId Int
-  users       LinkUserToDashboard[]
+  id             Int                   @id @default(autoincrement())
+  name           String                @db.VarChar(120)
+  description    String?               @db.VarChar(255)
+  ownerUser      User                  @relation(fields: [ownerUserId], references: [id], onDelete: Cascade)
+  ownerUserId    Int
+  users          LinkUserToDashboard[]
+  DashboardStage DashboardStage[]
+  DashboardTask  DashboardTask[]
+}
+
+model DashboardStage {
+  id            Int             @id @default(autoincrement())
+  name          String          @db.VarChar(120)
+  description   String?         @db.VarChar(120)
+  dashboard     Dashboard       @relation(fields: [dashboardId], references: [id], onDelete: Cascade)
+  dashboardId   Int
+  DashboardTask DashboardTask[]
+}
+
+model DashboardTask {
+  id               Int            @id @default(autoincrement())
+  name             String         @db.VarChar(120)
+  description      String?        @db.VarChar(120)
+  dashboard        Dashboard      @relation(fields: [dashboardId], references: [id], onDelete: Cascade)
+  dashboardId      Int
+  dashboardStage   DashboardStage @relation(fields: [dashboardStageId], references: [id], onDelete: Cascade)
+  dashboardStageId Int
 }
 
 model LinkUserToDashboard {
   id          Int       @id @default(autoincrement())
   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId      Int // relation scalar field (used in the `@relation` attribute above)
+  userId      Int
   dashboard   Dashboard @relation(fields: [dashboardId], references: [id], onDelete: Cascade)
-  dashboardId Int // relation scalar field (used in the `@relation` attribute above)
+  dashboardId Int
 
   @@unique([userId, dashboardId])
   @@index([userId, dashboardId])
