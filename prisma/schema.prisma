@@ -37,6 +37,9 @@ model DashboardStage {
   dashboard     Dashboard       @relation(fields: [dashboardId], references: [id], onDelete: Cascade)
   dashboardId   Int
   DashboardTask DashboardTask[]
+
+  @@unique([name, dashboardId])
+  @@index([name, dashboardId])
 }
 
 model DashboardTask {
